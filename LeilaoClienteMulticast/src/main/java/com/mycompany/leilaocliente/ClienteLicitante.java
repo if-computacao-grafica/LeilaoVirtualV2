@@ -25,13 +25,13 @@ import java.net.UnknownHostException;
 public class ClienteLicitante {    
     private String nomeLicitante;
     private MulticastSocket socket;
-    private Auction auction;
+    private Auction leilao;
 
-    public ClienteLicitante(String nomeLicitante, Auction auction) {
+    public ClienteLicitante(String nomeLicitante, Auction leilao) {
         try {
             this.nomeLicitante = nomeLicitante;
-            this.auction = auction;
-            this.socket = new MulticastSocket(auction.getPorta());
+            this.leilao = leilao;
+            this.socket = new MulticastSocket(leilao.getPorta());
         } catch (UnknownHostException ex) {
             System.out.println(ex.getMessage());
         } catch (IOException ex) {
@@ -41,18 +41,18 @@ public class ClienteLicitante {
 
     public boolean joinAuction() {
         try {
-            if (auction.getStatus() == Auction.INICIADO) {
-                socket.joinGroup(auction.getEndereco());
+            if (leilao.getStatus() == Auction.INICIADO) {
+                socket.joinGroup(leilao.getEndereco());
             }
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
-        return auction.getStatus() == Auction.INICIADO;
+        return leilao.getStatus() == Auction.INICIADO;
     }
 
-    public void leaveAuction() {
+    public void sairDoLeilao() {
         try {
-            socket.leaveGroup(auction.getEndereco());
+            socket.leaveGroup(leilao.getEndereco());
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
@@ -66,7 +66,7 @@ public class ClienteLicitante {
 
                 outputObject.writeObject(new StreamDto(StreamDto.REQUISICAO_LANCE, new LanceDto(preco, nomeLicitante)));
                 byte[] bytesData = outputBytes.toByteArray();
-                DatagramPacket packet = new DatagramPacket(bytesData, bytesData.length, auction.getEndereco(), auction.getPorta());
+                DatagramPacket packet = new DatagramPacket(bytesData, bytesData.length, leilao.getEndereco(), leilao.getPorta());
                 socket.send(packet);
                 outputObject.reset();
             } catch (IOException ex) {
@@ -76,8 +76,8 @@ public class ClienteLicitante {
         return isPriceEnough(preco);
     }
 
-    public boolean isPriceEnough(int price) {
-        return price > auction.getUltimoLance().getPreco();
+    public boolean isPriceEnough(int preco) {
+        return preco > leilao.getUltimoLance().getPreco() + 9;
     }
 
     public void listenBid(Runnable callbackBid, Runnable callbackEnd) {
@@ -93,10 +93,10 @@ public class ClienteLicitante {
 
                     StreamDto data = (StreamDto) inputObject.readObject();
                     if (data.getTipo() == StreamDto.RESPOSTA_LANCE) {
-                        auction.setUltimoLance((LanceDto) data.getPayload());
+                        leilao.setUltimoLance((LanceDto) data.getPayload());
                         callbackBid.run();
                     } else if (data.getTipo() == StreamDto.LEILAO_TERMINO) {
-                        leaveAuction();
+                        sairDoLeilao();
                         callbackEnd.run();
                     }
                 } catch (IOException | ClassNotFoundException ex) {
@@ -107,6 +107,6 @@ public class ClienteLicitante {
     }
 
     public Auction getAuction() {
-        return auction;
+        return leilao;
     }
 }
