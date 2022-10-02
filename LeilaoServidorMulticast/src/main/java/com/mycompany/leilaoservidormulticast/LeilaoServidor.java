@@ -67,10 +67,10 @@ public class LeilaoServidor {
             while (true) {
                 StreamDto requisicao = (StreamDto) input.readObject();
                 if (requisicao.getTipo() == StreamDto.REQUISICAO_LEILOES) {
-                    enviaActions(output);
+                    enviaLeiloes(output);
                 }
                 if (requisicao.getTipo() == StreamDto.REQUISICAO_CLIENTES) {
-                    sendClientes(output);
+                    enviaClientes(output);
                 }
             }
         } catch (IOException | ClassNotFoundException ex) {
@@ -78,7 +78,7 @@ public class LeilaoServidor {
         }
     }
 
-    public void enviaActions(ObjectOutputStream output) {
+    public void enviaLeiloes(ObjectOutputStream output) {
         try {
             output.writeObject(new StreamDto(StreamDto.RESPOSTA_LEILOES, leiloes));
             output.reset();
@@ -87,7 +87,7 @@ public class LeilaoServidor {
         }
     }
     
-    public void sendClientes(ObjectOutputStream output) {
+    public void enviaClientes(ObjectOutputStream output) {
         try {
             output.writeObject(new StreamDto(StreamDto.RESPOSTA_CLIENTES, clientes));
             output.reset();
@@ -96,15 +96,15 @@ public class LeilaoServidor {
         }
     }
 
-    public void addAuction(Leilao leilao) {
+    public void addLeilao(Leilao leilao) {
         leiloes.add(leilao);
     }
 
-    public void deleteAuction(int index) {
+    public void removeLeilao(int index) {
         leiloes.remove(index);
     }
 
-    public ArrayList<Leilao> getAuctions() {
+    public ArrayList<Leilao> getLeiloes() {
         return leiloes;
     }
     

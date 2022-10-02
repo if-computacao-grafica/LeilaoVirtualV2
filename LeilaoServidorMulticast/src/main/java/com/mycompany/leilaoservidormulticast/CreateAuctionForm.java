@@ -122,24 +122,24 @@ public class CreateAuctionForm extends javax.swing.JFrame {
 
     private void btn_createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_createActionPerformed
         // TODO add your handling code here:
-        parent.addAuction(createAuction());
+        parent.addLeilao(createAuction());
         this.setVisible(false);
     }//GEN-LAST:event_btn_createActionPerformed
 
     private Leilao createAuction() {
-        Leilao auction = null;
+        Leilao leilao = null;
         try {
-            String name = txt_name.getText();
-            int price = Integer.parseInt(txt_price.getText());
-            InetAddress address = InetAddress.getByName(txt_address.getText());
+            String nome = txt_name.getText();
+            int preco = Integer.parseInt(txt_price.getText());
+            InetAddress endereco = InetAddress.getByName(txt_address.getText());
             int port = Integer.parseInt(txt_port.getText());
             
-            Produto product = new Produto(name, price);
-            auction = new Leilao(product, address, port);
+            Produto produto = new Produto(nome, preco);
+            leilao = new Leilao(produto, endereco, port);
         } catch (UnknownHostException ex) {
             Logger.getLogger(Leilao.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return auction;
+        return leilao;
     }
     
     /**

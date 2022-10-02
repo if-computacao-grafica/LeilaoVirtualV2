@@ -97,8 +97,8 @@ public class EntrarForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_createActionPerformed
-        // TODO add your handling code here:
-        parent.addAuction(createAuction());
+       
+        parent.addLeilao(createAuction());
         this.setVisible(false);
     }//GEN-LAST:event_btn_createActionPerformed
 

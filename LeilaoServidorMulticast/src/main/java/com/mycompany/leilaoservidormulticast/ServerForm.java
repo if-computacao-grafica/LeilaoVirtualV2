@@ -76,6 +76,11 @@ public class ServerForm extends javax.swing.JFrame {
                 btn_finishMouseClicked(evt);
             }
         });
+        btn_finish.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_finishActionPerformed(evt);
+            }
+        });
 
         btn_create.setActionCommand("buttonCreate");
         btn_create.setLabel("Criar Ação");
@@ -159,49 +164,49 @@ public class ServerForm extends javax.swing.JFrame {
         btn_cancel.setEnabled(true);
     }
     
-    public void addAuction(Leilao auction) {
-        server.addAuction(auction);
+    public void addLeilao(Leilao leilao) {
+        server.addLeilao(leilao);
         refreshTable();
     }
     
     private void refreshTable() {
         DefaultTableModel model = (DefaultTableModel) tbl_auction.getModel();
         model.setRowCount(0);
-        server.getAuctions().forEach((auction) -> {
-            int status = auction.getStatus();
+        server.getLeiloes().forEach((leilao) -> {
+            int status = leilao.getStatus();
             
             model.addRow(new Object[]{
-                auction.getProduto().getNome(),
-                auction.getProduto().getPreco(),
-                auction.getEndereco().toString(),
-                auction.getPorta(),
-                auction.getUltimoLance().getPreco(),
-                auction.getUltimoLance().getNomeParticipante(),
+                leilao.getProduto().getNome(),
+                leilao.getProduto().getPreco(),
+                leilao.getEndereco().toString(),
+                leilao.getPorta(),
+                leilao.getUltimoLance().getPreco(),
+                leilao.getUltimoLance().getNomeParticipante(),
                 status == Leilao.NAO_INICIADO ? "not started" : status == Leilao.INICIADO ? "started" : "finished"
             });
         });
     }
     
     private void btn_createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_createActionPerformed
-        // TODO add your handling code here:
+      
         new CreateAuctionForm(this).setVisible(true);
     }//GEN-LAST:event_btn_createActionPerformed
 
     private void tbl_auctionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_auctionMouseClicked
-        // TODO add your handling code here:
+       
         int index = tbl_auction.getSelectedRow();
-        leilaoSelecionado = server.getAuctions().get(index);
+        leilaoSelecionado = server.getLeiloes().get(index);
         editMode();
     }//GEN-LAST:event_tbl_auctionMouseClicked
 
     private void btn_cancelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_cancelMouseClicked
-        // TODO add your handling code here:
+     
         normalMode();
         leilaoSelecionado = null;
     }//GEN-LAST:event_btn_cancelMouseClicked
 
     private void btn_startMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_startMouseClicked
-        // TODO add your handling code here:
+       
         leilaoSelecionado.iniciarLeilao(() -> {
             refreshTable();
         });
@@ -210,7 +215,7 @@ public class ServerForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_startMouseClicked
   
     private void btn_finishMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_finishMouseClicked
-        // TODO add your handling code here:
+        
         leilaoSelecionado.pararLeilao();
         refreshTable();
         normalMode();
@@ -225,9 +230,13 @@ public class ServerForm extends javax.swing.JFrame {
             System.out.println("fechar programa");
         }
         
-      
+        leilaoSelecionado.setStatus(2);
         
     }//GEN-LAST:event_btn_startActionPerformed
+
+    private void btn_finishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_finishActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_finishActionPerformed
     
     /**
      * @param args the command line arguments

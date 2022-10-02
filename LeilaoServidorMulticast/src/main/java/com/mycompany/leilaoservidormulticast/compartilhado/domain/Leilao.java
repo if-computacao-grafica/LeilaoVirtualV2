@@ -41,12 +41,12 @@ public class Leilao implements Serializable {
     }
     
     public void iniciarLeilao(Runnable callback) {
-        leiloeiro.joinAuction();
+        leiloeiro.entrarLeilao();
         leiloeiro.listenLance(callback);
     }
     
     public void pararLeilao() {
-        leiloeiro.leaveAuction();
+        leiloeiro.sairLeilao();
     }
 
     public Produto getProduto() {
