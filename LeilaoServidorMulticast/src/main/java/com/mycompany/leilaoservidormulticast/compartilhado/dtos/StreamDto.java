@@ -15,8 +15,8 @@ public class StreamDto implements Serializable {
     private int tipo;
     private Object payload;
     
-    public static final int REQUISICAO_AUCTIONS = 0;    
-    public static final int RESPOSTA_AUCTIONS = 1;
+    public static final int REQUISICAO_LEILOES = 0;    
+    public static final int RESPOSTA_LEILOES = 1;
     public static final int REQUISICAO_LANCE = 2;
     public static final int RESPOSTA_LANCE = 3;    
     public static final int LEILAO_TERMINO = 4;

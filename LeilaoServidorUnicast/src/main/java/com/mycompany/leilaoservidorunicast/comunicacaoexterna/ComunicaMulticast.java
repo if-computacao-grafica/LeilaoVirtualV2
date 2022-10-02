@@ -28,7 +28,7 @@ public class ComunicaMulticast {
     int serverPort;
     ObjectOutputStream output;
     ObjectInputStream input;
-    ArrayList<Leilao> auctions = new ArrayList<>();
+    ArrayList<Leilao> leiloes = new ArrayList<>();
 
     public ComunicaMulticast() {
         try {
@@ -46,7 +46,7 @@ public class ComunicaMulticast {
     
     public void enviarListaRequisicoesDoLeilao() { //verificar lógica do nome em razão do código
         try {
-            StreamDto data = new StreamDto(StreamDto.REQUISICAO_AUCTIONS);
+            StreamDto data = new StreamDto(StreamDto.REQUISICAO_LEILOES);
             output.writeObject(data);
         } catch (IOException ex) {
             Logger.getLogger(ComunicaMulticast.class.getName()).log(Level.SEVERE, null, ex);
@@ -55,13 +55,13 @@ public class ComunicaMulticast {
     
     public ArrayList<Leilao> listenListaLeilao() throws IOException, ClassNotFoundException {
         StreamDto data = (StreamDto) input.readObject();
-        if (data.getTipo() == StreamDto.RESPOSTA_AUCTIONS) {
+        if (data.getTipo() == StreamDto.RESPOSTA_LEILOES) {
             return (ArrayList<Leilao>) data.getPayload();
         }
         return null;
     }
     
     public ArrayList<Leilao> getAuctions() {
-        return auctions;
+        return leiloes;
     }
 }

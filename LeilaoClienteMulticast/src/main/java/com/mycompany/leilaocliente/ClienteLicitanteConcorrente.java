@@ -46,7 +46,7 @@ public class ClienteLicitanteConcorrente {
     
     public void enviarListaRequisicoesDoLeilao() { //verificar lógica do nome em razão do código
         try {
-            StreamDto data = new StreamDto(StreamDto.REQUISICAO_AUCTIONS);
+            StreamDto data = new StreamDto(StreamDto.REQUISICAO_LEILOES);
             output.writeObject(data);
         } catch (IOException ex) {
             Logger.getLogger(ClienteLicitanteConcorrente.class.getName()).log(Level.SEVERE, null, ex);
@@ -59,7 +59,7 @@ public class ClienteLicitanteConcorrente {
                 try {
                     StreamDto data = (StreamDto) input.readObject();
                     
-                    if (data.getTipo() == StreamDto.RESPOSTA_AUCTIONS) {
+                    if (data.getTipo() == StreamDto.RESPOSTA_LEILOES) {
                         auctions = (ArrayList<Leilao>) data.getPayload();
                         callback.run();
                     }

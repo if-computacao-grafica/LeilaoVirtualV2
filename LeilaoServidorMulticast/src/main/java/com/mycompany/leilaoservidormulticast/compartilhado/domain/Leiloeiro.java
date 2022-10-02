@@ -45,7 +45,7 @@ public class Leiloeiro implements Serializable {
 
     public void leaveAuction() {
         try {
-            sendEndAuction();
+            enviarFimDoLeilao();
             socket.leaveGroup(auction.getEndereco());
             auction.setStatus(Leilao.FINALIZADO);
         } catch (IOException ex) {
@@ -96,7 +96,7 @@ public class Leiloeiro implements Serializable {
         }
     }
     
-    public void sendEndAuction() {
+    public void enviarFimDoLeilao() {
         try {
             ByteArrayOutputStream outputBytes = new ByteArrayOutputStream();
             ObjectOutputStream outputObject = new ObjectOutputStream(outputBytes);
@@ -105,7 +105,7 @@ public class Leiloeiro implements Serializable {
             byte[] bytesData = outputBytes.toByteArray();
             DatagramPacket packet = new DatagramPacket(bytesData, bytesData.length, auction.getEndereco(), auction.getPorta());
             socket.send(packet);
-            System.out.println("Envio do ultimo lance"); // enviar ultima action
+            System.out.println("Envio do ultimo lance"); // enviar ultima auction
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }

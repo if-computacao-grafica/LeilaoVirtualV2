@@ -16,9 +16,9 @@ public class Produto implements Serializable {
     private String nome;
     private int preco;
 
-    public Produto(String nome, int price) {
+    public Produto(String nome, int preco) {
         this.nome = nome;
-        this.preco = price;
+        this.preco = preco;
     }
 
     public String getNome() {

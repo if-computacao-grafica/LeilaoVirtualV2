@@ -202,7 +202,7 @@ public class ServerForm extends javax.swing.JFrame {
 
     private void btn_startMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_startMouseClicked
         // TODO add your handling code here:
-        leilaoSelecionado.iniciarAuction(() -> {
+        leilaoSelecionado.iniciarLeilao(() -> {
             refreshTable();
         });
         refreshTable();
@@ -211,7 +211,7 @@ public class ServerForm extends javax.swing.JFrame {
   
     private void btn_finishMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_finishMouseClicked
         // TODO add your handling code here:
-        leilaoSelecionado.pararAuction();
+        leilaoSelecionado.pararLeilao();
         refreshTable();
         normalMode();
     }//GEN-LAST:event_btn_finishMouseClicked

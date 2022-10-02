@@ -40,12 +40,12 @@ public class Leilao implements Serializable {
         System.out.println(endereco.getHostAddress());
     }
     
-    public void iniciarAuction(Runnable callback) {
+    public void iniciarLeilao(Runnable callback) {
         leiloeiro.joinAuction();
         leiloeiro.listenLance(callback);
     }
     
-    public void pararAuction() {
+    public void pararLeilao() {
         leiloeiro.leaveAuction();
     }
 

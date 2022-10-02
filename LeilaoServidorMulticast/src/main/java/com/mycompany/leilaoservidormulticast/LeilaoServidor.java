@@ -66,7 +66,7 @@ public class LeilaoServidor {
         try {
             while (true) {
                 StreamDto requisicao = (StreamDto) input.readObject();
-                if (requisicao.getTipo() == StreamDto.REQUISICAO_AUCTIONS) {
+                if (requisicao.getTipo() == StreamDto.REQUISICAO_LEILOES) {
                     enviaActions(output);
                 }
                 if (requisicao.getTipo() == StreamDto.REQUISICAO_CLIENTES) {
@@ -80,7 +80,7 @@ public class LeilaoServidor {
 
     public void enviaActions(ObjectOutputStream output) {
         try {
-            output.writeObject(new StreamDto(StreamDto.RESPOSTA_AUCTIONS, leiloes));
+            output.writeObject(new StreamDto(StreamDto.RESPOSTA_LEILOES, leiloes));
             output.reset();
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
