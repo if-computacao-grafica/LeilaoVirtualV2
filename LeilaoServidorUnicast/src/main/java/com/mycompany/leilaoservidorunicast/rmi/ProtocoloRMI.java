@@ -37,9 +37,8 @@ public class ProtocoloRMI implements IProtocoloRMI {
     public boolean informarChavePublica(String endereco) {
         try {
             byte[] dadosChavePublica = Files.readAllBytes(Paths.get(endereco));
-            X509EncodedKeySpec spec = new X509EncodedKeySpec(dadosChavePublica);
             KeyFactory rsa = KeyFactory.getInstance("RSA");
-            
+            X509EncodedKeySpec spec = new X509EncodedKeySpec(dadosChavePublica);            
             chavePublica = rsa.generatePublic(spec);
             solicitarDadosSobreLeiloes();
             return true;
@@ -68,7 +67,7 @@ public class ProtocoloRMI implements IProtocoloRMI {
         String endereco = null;
         for (Auction auction : dadosLeiloes) {
             if(auction.getStatus() == 2){
-                endereco = auction.getEndereco().getHostAddress();
+                endereco = Base64.getEncoder().encodeToString(auction.getEndereco().getHostAddress().getBytes());
                 System.out.println("conferencia no get: " + endereco);
                 System.out.println(CriptografiaUtils.cifrarTexto(chavePublica, endereco.getBytes()));
                 return CriptografiaUtils.cifrarTexto(chavePublica, endereco.getBytes());

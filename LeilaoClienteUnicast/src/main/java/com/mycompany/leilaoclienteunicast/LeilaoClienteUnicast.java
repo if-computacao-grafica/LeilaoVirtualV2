@@ -75,14 +75,14 @@ public class LeilaoClienteUnicast {
                                     
                                     // Reconstrução da chaveDecifrada em texto
                                     byte[] decodedKey = Base64.getDecoder().decode(chaveDecifrada);
-                                    SecretKey a = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
+                                    SecretKey chaveAES = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
                                     
                                     // Representação da chave simetrica em texto
                                     System.out.print("Chave Multicast: ");
-                                    System.out.println(Base64.getDecoder().decode(chaveDecifrada));
+                                    System.out.println(Base64.getEncoder().encodeToString(chaveAES.getEncoded()));
                                     
                                     System.out.print("Endereco Multicast: ");
-                                    System.out.println(Base64.getDecoder().decode(enderecoDecifrado).toString());
+                                    System.out.println(new String(Base64.getDecoder().decode(enderecoDecifrado)));
                                 }
                             break;
                             case "criar":
@@ -93,7 +93,7 @@ public class LeilaoClienteUnicast {
                                 Cliente cliente = new Cliente(entrada[2]);
                                 clienteAtual = cliente;
                                 _rmi.addCliente(clienteAtual);
-                                System.out.println("Cliente" +entrada[2]+ "gerarado.");
+                                System.out.println("Cliente " +entrada[2]+ " gerarado.");
                                 break;
                         }
                         break;
