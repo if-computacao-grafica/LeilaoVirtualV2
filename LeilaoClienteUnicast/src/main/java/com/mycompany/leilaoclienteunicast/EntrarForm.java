@@ -50,7 +50,7 @@ public class EntrarForm extends javax.swing.JFrame {
 
         jLabel1.setText("Código Cliente");
 
-        btn_back.setText("Back");
+        btn_back.setText("Voltar");
 
         jLabel2.setText("Chave Publica");
 
