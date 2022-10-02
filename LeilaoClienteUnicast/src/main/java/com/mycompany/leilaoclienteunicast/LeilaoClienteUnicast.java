@@ -8,18 +8,15 @@ package com.mycompany.leilaoclienteunicast;
 import com.mycompany.leilaoservidorunicast.domain.Cliente;
 import com.mycompany.leilaoservidorunicast.rmi.IProtocoloRMI;
 import com.mycompany.leilaoservidorunicast.util.CriptografiaUtils;
-import java.io.ByteArrayInputStream;
-import java.io.ObjectInputStream;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.HashMap;
 import java.util.Scanner;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  *
@@ -76,16 +73,16 @@ public class LeilaoClienteUnicast {
                                     byte[] enderecoDecifrado = CriptografiaUtils.decifrarTexto(chavePrivada, enderecoCifrado);
                                     byte[] chaveDecifrada = CriptografiaUtils.decifrarTexto(chavePrivada, chaveCifrada);
                                     
-                                    // Reconstrução de chaveDecifrada em texto
-                                    // Base64.getDecoder().decode(chaveDecifrada);
-                                    // new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
+                                    // Reconstrução da chaveDecifrada em texto
+                                    byte[] decodedKey = Base64.getDecoder().decode(chaveDecifrada);
+                                    SecretKey a = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
                                     
                                     // Representação da chave simetrica em texto
                                     System.out.print("Chave Multicast: ");
-                                    System.out.println(Base64.getEncoder().encodeToString(chaveDecifrada));
+                                    System.out.println(Base64.getDecoder().decode(chaveDecifrada));
                                     
                                     System.out.print("Endereco Multicast: ");
-                                    System.out.println(Base64.getEncoder().encodeToString(enderecoDecifrado));
+                                    System.out.println(Base64.getDecoder().decode(enderecoDecifrado).toString());
                                 }
                             break;
                             case "criar":

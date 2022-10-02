@@ -56,6 +56,8 @@ public class ProtocoloRMI implements IProtocoloRMI {
                 chaveSimetrica = Base64.getEncoder().encodeToString(
                     auction.getChaveSimetrica().getEncoded());
                 
+                System.out.println("conferencia no get: " + chaveSimetrica);
+                
                 return CriptografiaUtils.cifrarTexto(chavePublica, chaveSimetrica.getBytes());
             }
         }
@@ -67,6 +69,8 @@ public class ProtocoloRMI implements IProtocoloRMI {
         for (Auction auction : dadosLeiloes) {
             if(auction.getStatus() == 2){
                 endereco = auction.getEndereco().getHostAddress();
+                System.out.println("conferencia no get: " + endereco);
+                System.out.println(CriptografiaUtils.cifrarTexto(chavePublica, endereco.getBytes()));
                 return CriptografiaUtils.cifrarTexto(chavePublica, endereco.getBytes());
             }
         }

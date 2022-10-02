@@ -13,6 +13,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.*;
+import java.util.Base64;
 import java.util.Random;
 
 /**
@@ -51,13 +52,15 @@ public class CriptografiaUtils {
     public static SecretKey gerarChave() {
         try {
             KeyGenerator gerador = KeyGenerator.getInstance("AES");
-            SecureRandom random = new SecureRandom();
-            gerador.init(random);
-            return gerador.generateKey();
-            
-        } catch (Exception e) {
+            gerador.init(256);
+            SecretKey chaveAES = gerador.generateKey();
+
+            /* print para conferir chave gerada*/
+            String aesBase64 = Base64.getEncoder().encodeToString(chaveAES.getEncoded());
+            System.out.println("aesBase64: " + aesBase64);
+            return chaveAES;
+        } catch (NoSuchAlgorithmException e) {
             System.err.println(e.toString());
-            e.printStackTrace();
             return null;
         }
     }

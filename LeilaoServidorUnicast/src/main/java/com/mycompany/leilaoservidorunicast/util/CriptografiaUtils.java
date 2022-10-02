@@ -1,15 +1,13 @@
 package com.mycompany.leilaoservidorunicast.util;
 
 import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 
 public class CriptografiaUtils {
     
@@ -27,7 +25,7 @@ public class CriptografiaUtils {
         return parDeChaves;
     }
     
-    public static void armazenarChavePublica(byte[] chave, String endereco, String nome) {
+    public static void armazenarChave(byte[] chave, String endereco, String nome) {
         try {
             Files.createDirectories(Paths.get(endereco));
             FileOutputStream keyfos = new FileOutputStream(nome);
@@ -42,7 +40,7 @@ public class CriptografiaUtils {
 
     public static PrivateKey lerChavePrivada(String endereco) {
         PrivateKey chave = null;
-        try {
+        try {            
             byte[] keyBytes = Files.readAllBytes(Paths.get(endereco));
             KeyFactory kf = KeyFactory.getInstance("RSA");
             PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);

@@ -26,7 +26,7 @@ public class Auction implements Serializable {
     private final int porta;
     private final Leiloeiro leiloeiro;
     private int status = Auction.NAO_INICIADO;
-    private final SecretKey ChaveSimetrica;
+    private final SecretKey chaveSimetrica;
 
     public Auction(Produto produto, InetAddress endereco, int porta) {
         this.produto = produto;
@@ -34,7 +34,10 @@ public class Auction implements Serializable {
         this.endereco = endereco;
         this.porta = porta;
         this.leiloeiro = new Leiloeiro(this);
-        this.ChaveSimetrica = CriptografiaUtils.gerarChave();
+        this.chaveSimetrica = CriptografiaUtils.gerarChave();
+
+        System.out.print("Criação endereco leilao: ");
+        System.out.println(endereco.getHostAddress());
     }
     
     public void iniciarAuction(Runnable callback) {
@@ -81,7 +84,7 @@ public class Auction implements Serializable {
     }
 
     public SecretKey getChaveSimetrica() {
-        return ChaveSimetrica;
+        return chaveSimetrica;
     }
 
 }

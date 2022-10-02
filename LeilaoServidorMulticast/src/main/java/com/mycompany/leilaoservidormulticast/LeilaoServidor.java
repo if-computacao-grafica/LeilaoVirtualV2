@@ -14,7 +14,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 /**
@@ -33,7 +32,6 @@ public class LeilaoServidor {
         try {
             server = new ServerSocket(PORT);
             listenRequisicao();
-            CriptografiaUtils.gerarChave();
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }

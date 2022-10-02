@@ -13,13 +13,17 @@ public class Cliente implements Serializable{
         this.nome = nome;
         
         KeyPair parDeChaves = CriptografiaUtils.gerarParDeChaves();
+
         // Armazena chave pública em arquivo
-        CriptografiaUtils.armazenarChavePublica(parDeChaves.getPublic().getEncoded(),
-                           "C:\\chaves\\chavesPublicas",
-                           "C:\\chaves\\chavesPublicas\\"+nome);
-        CriptografiaUtils.armazenarChavePublica(parDeChaves.getPrivate().getEncoded(),
-                           "C:\\chaves\\chavesPrivadas",
-                           "C:\\chaves\\chavesPrivadas\\"+nome);
+        CriptografiaUtils.armazenarChave(
+            parDeChaves.getPublic().getEncoded(),
+            "C:\\chaves\\chavesPublicas",
+            "C:\\chaves\\chavesPublicas\\"+nome);
+        
+        CriptografiaUtils.armazenarChave(
+            parDeChaves.getPrivate().getEncoded(),
+            "C:\\chaves\\chavesPrivadas",
+            "C:\\chaves\\chavesPrivadas\\"+nome);
     }
     
     private final String nome;
