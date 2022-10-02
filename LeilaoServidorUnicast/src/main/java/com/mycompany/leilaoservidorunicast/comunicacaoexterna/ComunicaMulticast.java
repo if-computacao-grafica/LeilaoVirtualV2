@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  *
  * @author skmat
  */
-public class ClienteLicitanteConcorrente {
+public class ComunicaMulticast {
     
     Socket socket;
     InetAddress serverAddress;
@@ -30,7 +30,7 @@ public class ClienteLicitanteConcorrente {
     ObjectInputStream input;
     ArrayList<Auction> auctions = new ArrayList<>();
 
-    public ClienteLicitanteConcorrente() {
+    public ComunicaMulticast() {
         try {
             serverAddress = InetAddress.getByName("localhost");
             serverPort = 3000;
@@ -38,9 +38,9 @@ public class ClienteLicitanteConcorrente {
             output = new ObjectOutputStream(socket.getOutputStream());
             input = new ObjectInputStream(socket.getInputStream());
         } catch (UnknownHostException ex) {
-            Logger.getLogger(ClienteLicitanteConcorrente.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ComunicaMulticast.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(ClienteLicitanteConcorrente.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ComunicaMulticast.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -49,7 +49,7 @@ public class ClienteLicitanteConcorrente {
             StreamDto data = new StreamDto(StreamDto.REQUISICAO_AUCTIONS);
             output.writeObject(data);
         } catch (IOException ex) {
-            Logger.getLogger(ClienteLicitanteConcorrente.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ComunicaMulticast.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

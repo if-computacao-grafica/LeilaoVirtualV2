@@ -8,7 +8,8 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.*;
-import java.util.Random;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 
 public class CriptografiaUtils {
     
@@ -26,7 +27,7 @@ public class CriptografiaUtils {
         return parDeChaves;
     }
     
-    public static void armazenarChave(byte[] chave, String endereco, String nome) {
+    public static void armazenarChavePublica(byte[] chave, String endereco, String nome) {
         try {
             Files.createDirectories(Paths.get(endereco));
             FileOutputStream keyfos = new FileOutputStream(nome);
@@ -39,26 +40,27 @@ public class CriptografiaUtils {
         }
     }
 
-    public static void gerarChave() {
+    public static PrivateKey lerChavePrivada(String endereco) {
+        PrivateKey chave = null;
         try {
-            KeyGenerator gerador = KeyGenerator.getInstance("AES");
-            SecureRandom random = new SecureRandom();
-            gerador.init(random);
-            SecretKey chave = gerador.generateKey();
-            armazenarChave(chave.getEncoded(),
-                           "C:\\chaves\\chaveAES",
-                           "C:\\chaves\\chaveAES\\chaveSimetricaServidor");
-        } catch (Exception e) {
+            byte[] keyBytes = Files.readAllBytes(Paths.get(endereco));
+            KeyFactory kf = KeyFactory.getInstance("RSA");
+            PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
+            chave = kf.generatePrivate(keySpec);
+        } catch(Exception e) {
             System.err.println(e.toString());
             e.printStackTrace();
         }
+        return chave;
     }
-
-    public static Key getChave(String endereco) {
-        SecretKey chave = null;
+    
+    public static PublicKey lerChavePublica(String endereco) {
+        PublicKey chave = null;
         try {
-            byte[] encoded = Files.readAllBytes(Paths.get(endereco));
-            chave = new SecretKeySpec(encoded, "AES");
+            byte[] keyBytes = Files.readAllBytes(Paths.get(endereco));
+            X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
+            KeyFactory kf = KeyFactory.getInstance("RSA");
+            chave = kf.generatePublic(spec);
         } catch(Exception e) {
             System.err.println(e.toString());
             e.printStackTrace();
@@ -79,19 +81,6 @@ public class CriptografiaUtils {
         return resultado;
     }
      
-    public static byte[] cifrarTexto(Key chaveAES, byte[] message) {
-        byte[] resultado = null;
-        try {
-            Cipher cifra = Cipher.getInstance("AES");
-            cifra.init(Cipher.ENCRYPT_MODE, chaveAES);
-            
-            resultado = cifra.doFinal(message);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        return resultado;
-    }
-     
     public static byte[] decifrarTexto(PrivateKey chavePrivada, byte[] message) {
         byte[] resultado = null;
         try {
@@ -103,34 +92,5 @@ public class CriptografiaUtils {
         }
         return resultado;
     }
-    
-    public static byte[] decifrarTexto(Key chaveAES, byte[] message) {
-        byte[] resultado = null;
-        try {
-            Cipher cifra = Cipher.getInstance("AES");
-            cifra.init(Cipher.DECRYPT_MODE, chaveAES);
-            resultado = cifra.doFinal(message);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        return resultado;
-    }
 
-    public static byte[] gerarHash(byte[] dados) {
-        byte[] resultado = new byte[30];
-        try {
-            MessageDigest instanciaSHA = MessageDigest.getInstance("SHA-256");
-            resultado = instanciaSHA.digest(dados);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        return resultado;
-    }
-
-    public static byte[] gerarBytesAleatorios() {
-        Random rd = new Random();
-        byte[] dados = new byte[32];
-        rd.nextBytes(dados);
-        return dados;
-    }
 }

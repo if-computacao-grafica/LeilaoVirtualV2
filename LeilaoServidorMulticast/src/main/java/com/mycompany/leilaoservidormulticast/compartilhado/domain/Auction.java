@@ -9,6 +9,7 @@ import com.mycompany.leilaoservidormulticast.compartilhado.dtos.LanceDto;
 import com.mycompany.leilaoservidormulticast.utils.CriptografiaUtils;
 import java.io.Serializable;
 import java.net.InetAddress;
+import javax.crypto.SecretKey;
 
 /**
  *
@@ -25,6 +26,7 @@ public class Auction implements Serializable {
     private final int porta;
     private final Leiloeiro leiloeiro;
     private int status = Auction.NAO_INICIADO;
+    private final SecretKey ChaveSimetrica;
 
     public Auction(Produto produto, InetAddress endereco, int porta) {
         this.produto = produto;
@@ -32,6 +34,7 @@ public class Auction implements Serializable {
         this.endereco = endereco;
         this.porta = porta;
         this.leiloeiro = new Leiloeiro(this);
+        this.ChaveSimetrica = CriptografiaUtils.gerarChave();
     }
     
     public void iniciarAuction(Runnable callback) {
@@ -76,4 +79,9 @@ public class Auction implements Serializable {
     public void setStatus(int status) {
         this.status = status;
     }
+
+    public SecretKey getChaveSimetrica() {
+        return ChaveSimetrica;
+    }
+
 }
