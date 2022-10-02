@@ -1,20 +1,17 @@
 package com.mycompany.leilaoservidorunicast.rmi;
 
-import com.mycompany.leilaoservidormulticast.compartilhado.domain.Auction;
 import com.mycompany.leilaoservidorunicast.domain.Cliente;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.HashMap;
+import java.util.ArrayList;
+
 public interface IProtocoloRMI extends Remote {
-    public HashMap<Integer, Cliente> getClientes() throws RemoteException;
-    public Cliente getCliente(int id) throws RemoteException;
-    
-    // Criações
+    // Cliente
     public void addCliente(Cliente clientes) throws RemoteException; 
+    public ArrayList<Cliente> getClientes() throws RemoteException;
     
-    // Criptografia
-    public byte[] obterMensagemCifrada(byte[] mensagem) throws RemoteException;    
-    public byte[] solicitarEnderecosMulticast(int clientID) throws RemoteException;
-    public byte[] solicitarChaveAES(int idCliente) throws RemoteException; 
-    
+    // Comunicação
+    public boolean informarChavePublica(String endereco) throws RemoteException; 
+    public byte[] getEnderecoMulticast() throws RemoteException;
+    public byte[] getChaveSimetrica() throws RemoteException;
 }

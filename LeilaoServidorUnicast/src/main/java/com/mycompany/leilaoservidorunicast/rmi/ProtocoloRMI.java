@@ -1,27 +1,27 @@
 package com.mycompany.leilaoservidorunicast.rmi;
 
 import com.mycompany.leilaoservidormulticast.compartilhado.domain.Auction;
-import com.mycompany.leilaoservidorunicast.comunicacaoexterna.ClienteLicitanteConcorrente;
+import com.mycompany.leilaoservidorunicast.comunicacaoexterna.ComunicaMulticast;
 import com.mycompany.leilaoservidorunicast.domain.Cliente;
 import com.mycompany.leilaoservidorunicast.util.CriptografiaUtils;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.rmi.RemoteException;
 import java.security.*;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ProtocoloRMI implements IProtocoloRMI {
-    private HashMap<Integer, Cliente> clientes = new HashMap<>();
-    private PublicKey chavePublica;
-    private ClienteLicitanteConcorrente bidderCandidate = new ClienteLicitanteConcorrente();
-    private byte[]  obj = null;
+    private ArrayList<Cliente> clientes = new ArrayList<Cliente>(); 
     
-    public HashMap<Integer, Cliente> getClientes() {
+    private ComunicaMulticast comunicacoExterna = new ComunicaMulticast();
+    private ArrayList<Auction> dadosLeiloes = new ArrayList<Auction>();
+    private PublicKey chavePublica;
+
+    
+    public ArrayList<Cliente> getClientes() {
         return clientes;
     }
 
@@ -30,65 +30,51 @@ public class ProtocoloRMI implements IProtocoloRMI {
     }
         
     public void addCliente(Cliente cliente) {
-        clientes.put(cliente.getId(), cliente);
+        clientes.add(cliente);
     }
 
-    public byte[] obterMensagemCifrada(byte[] bytesGerados) {
-        return CriptografiaUtils.cifrarTexto(chavePublica, bytesGerados);
-    }
 
-    public byte[] solicitarChaveAES(int clientID){
-        byte[] obj = null;
+    public boolean informarChavePublica(String endereco) {
         try {
-            Cliente clienteSolicitante = clientes.get(clientID);
-            Key chaveAES = CriptografiaUtils.getChave("C:\\chaves\\chaveAES\\chaveSimetricaServidor");
+            byte[] dadosChavePublica = Files.readAllBytes(Paths.get(endereco));
+            X509EncodedKeySpec spec = new X509EncodedKeySpec(dadosChavePublica);
+            KeyFactory rsa = KeyFactory.getInstance("RSA");
             
-            obj = CriptografiaUtils.cifrarTexto(
-                                    clienteSolicitante.getChavePublica(),
-                                    chaveAES.getEncoded());
- 
+            chavePublica = rsa.generatePublic(spec);
+            solicitarDadosSobreLeiloes();
+            return true;
         } catch(Exception e) {
             e.printStackTrace();
+            return false;
         }
-        return obj;
     }
-    
-    // Metodos para envio de endereços de multicast
-    public byte[] solicitarEnderecosMulticast(int idCliente) throws RemoteException{
-        try {
-            Cliente clienteSolicitante = clientes.get(idCliente);
-            bidderCandidate.enviarListaRequisicoesDoLeilao();
-            byte[] byteArray;
-            
-            ArrayList<Auction> array = bidderCandidate.listenListaLeilao();
-            ArrayList<String> enderecos = new ArrayList<String>();
-            for (Auction auction : array) {
-                if(auction.getStatus() == 2){
-                    enderecos.add(
-                                auction.getEndereco().getHostAddress()
-                                + " " +
-                                auction.getProduto().getNome());
-                }
+
+    public byte[] getChaveSimetrica() throws RemoteException {
+        String chaveSimetrica = null;
+        for (Auction auction : dadosLeiloes) {
+            if(auction.getStatus() == 2){
+                chaveSimetrica = Base64.getEncoder().encodeToString(
+                    auction.getChaveSimetrica().getEncoded());
+                
+                return CriptografiaUtils.cifrarTexto(chavePublica, chaveSimetrica.getBytes());
             }
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-            ObjectOutputStream oos;
-            oos = new ObjectOutputStream(baos);
-            oos.writeObject(enderecos);
-
-            // Convert to Byte Array
-            byteArray = baos.toByteArray();
-            obj = CriptografiaUtils.cifrarTexto(
-                                    clienteSolicitante.getChavePublica(),
-                                    byteArray);
-
-            return obj;
-        } catch (IOException ex) {
-            Logger.getLogger(ProtocoloRMI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ProtocoloRMI.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
-
+    
+    public byte[] getEnderecoMulticast() throws RemoteException{
+        String endereco = null;
+        for (Auction auction : dadosLeiloes) {
+            if(auction.getStatus() == 2){
+                endereco = auction.getEndereco().getHostAddress();
+                return CriptografiaUtils.cifrarTexto(chavePublica, endereco.getBytes());
+            }
+        }
+        return null;
+    }
+    
+    public void solicitarDadosSobreLeiloes() throws IOException, ClassNotFoundException {
+        comunicacoExterna.enviarListaRequisicoesDoLeilao();          
+        dadosLeiloes = comunicacoExterna.listenListaLeilao();
+    }
 }
