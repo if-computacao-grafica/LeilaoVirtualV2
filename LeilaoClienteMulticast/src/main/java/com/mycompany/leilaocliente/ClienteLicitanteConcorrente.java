@@ -5,7 +5,7 @@
  */
 package com.mycompany.leilaocliente;
 
-import com.mycompany.leilaoservidormulticast.compartilhado.domain.Auction;
+import com.mycompany.leilaoservidormulticast.compartilhado.domain.Leilao;
 import com.mycompany.leilaoservidormulticast.compartilhado.dtos.StreamDto;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -28,7 +28,7 @@ public class ClienteLicitanteConcorrente {
     int serverPort;
     ObjectOutputStream output;
     ObjectInputStream input;
-    ArrayList<Auction> auctions = new ArrayList<>();
+    ArrayList<Leilao> auctions = new ArrayList<>();
 
     public ClienteLicitanteConcorrente() {
         try {
@@ -46,7 +46,7 @@ public class ClienteLicitanteConcorrente {
     
     public void enviarListaRequisicoesDoLeilao() { //verificar lógica do nome em razão do código
         try {
-            StreamDto data = new StreamDto(StreamDto.REQUISICAO_AUCTIONS);
+            StreamDto data = new StreamDto(StreamDto.REQUISICAO_LEILOES);
             output.writeObject(data);
         } catch (IOException ex) {
             Logger.getLogger(ClienteLicitanteConcorrente.class.getName()).log(Level.SEVERE, null, ex);
@@ -59,8 +59,8 @@ public class ClienteLicitanteConcorrente {
                 try {
                     StreamDto data = (StreamDto) input.readObject();
                     
-                    if (data.getTipo() == StreamDto.RESPOSTA_AUCTIONS) {
-                        auctions = (ArrayList<Auction>) data.getPayload();
+                    if (data.getTipo() == StreamDto.RESPOSTA_LEILOES) {
+                        auctions = (ArrayList<Leilao>) data.getPayload();
                         callback.run();
                     }
                 } catch (IOException | ClassNotFoundException ex) {
@@ -70,7 +70,7 @@ public class ClienteLicitanteConcorrente {
         }).start();
     }
 
-    public ArrayList<Auction> getAuctions() {
+    public ArrayList<Leilao> getAuctions() {
         return auctions;
     }
 }

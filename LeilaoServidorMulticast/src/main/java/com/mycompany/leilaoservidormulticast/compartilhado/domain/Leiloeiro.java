@@ -23,31 +23,31 @@ import java.io.Serializable;
 public class Leiloeiro implements Serializable {
 
     private transient MulticastSocket socket;
-    private Auction auction;
+    private Leilao leilao;
 
-    public Leiloeiro(Auction auction) {
+    public Leiloeiro(Leilao leilao) {
         try {
-            this.auction = auction;
-            socket = new MulticastSocket(auction.getPorta());
+            this.leilao = leilao;
+            socket = new MulticastSocket(leilao.getPorta());
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
     }
 
-    public void joinAuction() {
+    public void entrarLeilao() {
         try {
-            socket.joinGroup(auction.getEndereco());
-            auction.setStatus(Auction.INICIADO);
+            socket.joinGroup(leilao.getEndereco());
+            leilao.setStatus(Leilao.INICIADO);
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
     }
 
-    public void leaveAuction() {
+    public void sairLeilao() {
         try {
-            sendEndAuction();
-            socket.leaveGroup(auction.getEndereco());
-            auction.setStatus(Auction.FINALIZADO);
+            enviarFimDoLeilao();
+            socket.leaveGroup(leilao.getEndereco());
+            leilao.setStatus(Leilao.FINALIZADO);
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
@@ -68,8 +68,8 @@ public class Leiloeiro implements Serializable {
                     LanceDto lanceRequisicao = (LanceDto) data.getPayload();
                     
                     if (data.getTipo() == StreamDto.REQUISICAO_LANCE) {
-                        if (lanceRequisicao.getPreco() > auction.getUltimoLance().getPreco()) {
-                            auction.setUltimoLance(lanceRequisicao);
+                        if (lanceRequisicao.getPreco() > leilao.getUltimoLance().getPreco()) {
+                            leilao.setUltimoLance(lanceRequisicao);
                             enviarUltimoLance();
                             callback.run();
                         }
@@ -86,9 +86,9 @@ public class Leiloeiro implements Serializable {
             ByteArrayOutputStream outputBytes = new ByteArrayOutputStream();
             ObjectOutputStream outputObject = new ObjectOutputStream(outputBytes);
 
-            outputObject.writeObject(new StreamDto(StreamDto.RESPOSTA_LANCE, auction.getUltimoLance()));
+            outputObject.writeObject(new StreamDto(StreamDto.RESPOSTA_LANCE, leilao.getUltimoLance()));
             byte[] bytesData = outputBytes.toByteArray();
-            DatagramPacket packet = new DatagramPacket(bytesData, bytesData.length, auction.getEndereco(), auction.getPorta());
+            DatagramPacket packet = new DatagramPacket(bytesData, bytesData.length, leilao.getEndereco(), leilao.getPorta());
             socket.send(packet);
             System.out.println("Envio do ultimo lance");
         } catch (IOException ex) {
@@ -96,16 +96,16 @@ public class Leiloeiro implements Serializable {
         }
     }
     
-    public void sendEndAuction() {
+    public void enviarFimDoLeilao() {
         try {
             ByteArrayOutputStream outputBytes = new ByteArrayOutputStream();
             ObjectOutputStream outputObject = new ObjectOutputStream(outputBytes);
 
             outputObject.writeObject(new StreamDto(StreamDto.LEILAO_TERMINO));
             byte[] bytesData = outputBytes.toByteArray();
-            DatagramPacket packet = new DatagramPacket(bytesData, bytesData.length, auction.getEndereco(), auction.getPorta());
+            DatagramPacket packet = new DatagramPacket(bytesData, bytesData.length, leilao.getEndereco(), leilao.getPorta());
             socket.send(packet);
-            System.out.println("Envio do ultimo lance"); // enviar ultima action
+            System.out.println("Envio do ultimo lance"); // enviar ultima leilao
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }

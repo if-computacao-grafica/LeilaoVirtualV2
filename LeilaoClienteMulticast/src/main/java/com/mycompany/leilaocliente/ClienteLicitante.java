@@ -5,7 +5,7 @@
  */
 package com.mycompany.leilaocliente;
 
-import com.mycompany.leilaoservidormulticast.compartilhado.domain.Auction;
+import com.mycompany.leilaoservidormulticast.compartilhado.domain.Leilao;
 import com.mycompany.leilaoservidormulticast.compartilhado.dtos.LanceDto;
 import com.mycompany.leilaoservidormulticast.compartilhado.dtos.StreamDto;
 import java.io.ByteArrayInputStream;
@@ -25,9 +25,9 @@ import java.net.UnknownHostException;
 public class ClienteLicitante {    
     private String nomeLicitante;
     private MulticastSocket socket;
-    private Auction leilao;
+    private Leilao leilao;
 
-    public ClienteLicitante(String nomeLicitante, Auction leilao) {
+    public ClienteLicitante(String nomeLicitante, Leilao leilao) {
         try {
             this.nomeLicitante = nomeLicitante;
             this.leilao = leilao;
@@ -41,13 +41,13 @@ public class ClienteLicitante {
 
     public boolean joinAuction() {
         try {
-            if (leilao.getStatus() == Auction.INICIADO) {
+            if (leilao.getStatus() == Leilao.INICIADO) {
                 socket.joinGroup(leilao.getEndereco());
             }
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
-        return leilao.getStatus() == Auction.INICIADO;
+        return leilao.getStatus() == Leilao.INICIADO;
     }
 
     public void sairDoLeilao() {
@@ -106,7 +106,7 @@ public class ClienteLicitante {
         }).start();
     }
 
-    public Auction getAuction() {
+    public Leilao getAuction() {
         return leilao;
     }
 }

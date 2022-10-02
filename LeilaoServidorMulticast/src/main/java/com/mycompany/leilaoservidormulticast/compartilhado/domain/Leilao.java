@@ -15,7 +15,7 @@ import javax.crypto.SecretKey;
  *
  * @author skmat
  */
-public class Auction implements Serializable {
+public class Leilao implements Serializable {
     public static final int NAO_INICIADO = 1;    
     public static final int INICIADO = 2;
     public static final int FINALIZADO = 3;
@@ -25,10 +25,10 @@ public class Auction implements Serializable {
     private final InetAddress endereco;
     private final int porta;
     private final Leiloeiro leiloeiro;
-    private int status = Auction.NAO_INICIADO;
+    private int status = Leilao.NAO_INICIADO;
     private final SecretKey chaveSimetrica;
 
-    public Auction(Produto produto, InetAddress endereco, int porta) {
+    public Leilao(Produto produto, InetAddress endereco, int porta) {
         this.produto = produto;
         this.ultimoLance = new LanceDto(produto.getPreco());
         this.endereco = endereco;
@@ -40,13 +40,13 @@ public class Auction implements Serializable {
         System.out.println(endereco.getHostAddress());
     }
     
-    public void iniciarAuction(Runnable callback) {
-        leiloeiro.joinAuction();
+    public void iniciarLeilao(Runnable callback) {
+        leiloeiro.entrarLeilao();
         leiloeiro.listenLance(callback);
     }
     
-    public void pararAuction() {
-        leiloeiro.leaveAuction();
+    public void pararLeilao() {
+        leiloeiro.sairLeilao();
     }
 
     public Produto getProduto() {

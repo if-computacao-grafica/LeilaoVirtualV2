@@ -1,6 +1,6 @@
 package com.mycompany.leilaoservidormulticast;
 
-import com.mycompany.leilaoservidormulticast.compartilhado.domain.Auction;
+import com.mycompany.leilaoservidormulticast.compartilhado.domain.Leilao;
 import com.mycompany.leilaoservidormulticast.compartilhado.domain.Produto;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -122,24 +122,24 @@ public class CreateAuctionForm extends javax.swing.JFrame {
 
     private void btn_createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_createActionPerformed
         // TODO add your handling code here:
-        parent.addAuction(createAuction());
+        parent.addLeilao(createAuction());
         this.setVisible(false);
     }//GEN-LAST:event_btn_createActionPerformed
 
-    private Auction createAuction() {
-        Auction auction = null;
+    private Leilao createAuction() {
+        Leilao leilao = null;
         try {
-            String name = txt_name.getText();
-            int price = Integer.parseInt(txt_price.getText());
-            InetAddress address = InetAddress.getByName(txt_address.getText());
+            String nome = txt_name.getText();
+            int preco = Integer.parseInt(txt_price.getText());
+            InetAddress endereco = InetAddress.getByName(txt_address.getText());
             int port = Integer.parseInt(txt_port.getText());
             
-            Produto product = new Produto(name, price);
-            auction = new Auction(product, address, port);
+            Produto produto = new Produto(nome, preco);
+            leilao = new Leilao(produto, endereco, port);
         } catch (UnknownHostException ex) {
-            Logger.getLogger(Auction.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Leilao.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return auction;
+        return leilao;
     }
     
     /**
@@ -159,14 +159,18 @@ public class CreateAuctionForm extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Auction.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Leilao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Auction.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Leilao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Auction.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Leilao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Auction.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Leilao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>

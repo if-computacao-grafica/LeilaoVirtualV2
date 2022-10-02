@@ -1,6 +1,7 @@
 package com.mycompany.leilaoservidormulticast;
 
-import com.mycompany.leilaoservidormulticast.compartilhado.domain.Auction;
+import com.mycompany.leilaoservidormulticast.compartilhado.domain.Leilao;
+import com.mycompany.leilaoservidormulticast.utils.Temporizador;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,7 +14,7 @@ import javax.swing.table.DefaultTableModel;
 public class ServerForm extends javax.swing.JFrame {
     
     private LeilaoServidor server = new LeilaoServidor();
-    private Auction selectedAuction;
+    private Leilao leilaoSelecionado;
     
     /**
      * Creates new form Server
@@ -75,6 +76,11 @@ public class ServerForm extends javax.swing.JFrame {
                 btn_finishMouseClicked(evt);
             }
         });
+        btn_finish.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_finishActionPerformed(evt);
+            }
+        });
 
         btn_create.setActionCommand("buttonCreate");
         btn_create.setLabel("Criar Ação");
@@ -89,6 +95,11 @@ public class ServerForm extends javax.swing.JFrame {
         btn_start.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btn_startMouseClicked(evt);
+            }
+        });
+        btn_start.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_startActionPerformed(evt);
             }
         });
 
@@ -148,55 +159,55 @@ public class ServerForm extends javax.swing.JFrame {
     }
     
     private void editMode() {
-        btn_start.setEnabled(selectedAuction.getStatus() == Auction.NAO_INICIADO);
-        btn_finish.setEnabled(selectedAuction.getStatus() == Auction.INICIADO);
+        btn_start.setEnabled(leilaoSelecionado.getStatus() == Leilao.NAO_INICIADO);
+        btn_finish.setEnabled(leilaoSelecionado.getStatus() == Leilao.INICIADO);
         btn_cancel.setEnabled(true);
     }
     
-    public void addAuction(Auction auction) {
-        server.addAuction(auction);
+    public void addLeilao(Leilao leilao) {
+        server.addLeilao(leilao);
         refreshTable();
     }
     
     private void refreshTable() {
         DefaultTableModel model = (DefaultTableModel) tbl_auction.getModel();
         model.setRowCount(0);
-        server.getAuctions().forEach((auction) -> {
-            int status = auction.getStatus();
+        server.getLeiloes().forEach((leilao) -> {
+            int status = leilao.getStatus();
             
             model.addRow(new Object[]{
-                auction.getProduto().getNome(),
-                auction.getProduto().getPreco(),
-                auction.getEndereco().toString(),
-                auction.getPorta(),
-                auction.getUltimoLance().getPreco(),
-                auction.getUltimoLance().getNomeParticipante(),
-                status == Auction.NAO_INICIADO ? "not started" : status == Auction.INICIADO ? "started" : "finished"
+                leilao.getProduto().getNome(),
+                leilao.getProduto().getPreco(),
+                leilao.getEndereco().toString(),
+                leilao.getPorta(),
+                leilao.getUltimoLance().getPreco(),
+                leilao.getUltimoLance().getNomeParticipante(),
+                status == Leilao.NAO_INICIADO ? "not started" : status == Leilao.INICIADO ? "started" : "finished"
             });
         });
     }
     
     private void btn_createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_createActionPerformed
-        // TODO add your handling code here:
+      
         new CreateAuctionForm(this).setVisible(true);
     }//GEN-LAST:event_btn_createActionPerformed
 
     private void tbl_auctionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_auctionMouseClicked
-        // TODO add your handling code here:
+       
         int index = tbl_auction.getSelectedRow();
-        selectedAuction = server.getAuctions().get(index);
+        leilaoSelecionado = server.getLeiloes().get(index);
         editMode();
     }//GEN-LAST:event_tbl_auctionMouseClicked
 
     private void btn_cancelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_cancelMouseClicked
-        // TODO add your handling code here:
+     
         normalMode();
-        selectedAuction = null;
+        leilaoSelecionado = null;
     }//GEN-LAST:event_btn_cancelMouseClicked
 
     private void btn_startMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_startMouseClicked
-        // TODO add your handling code here:
-        selectedAuction.iniciarAuction(() -> {
+       
+        leilaoSelecionado.iniciarLeilao(() -> {
             refreshTable();
         });
         refreshTable();
@@ -204,11 +215,28 @@ public class ServerForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_startMouseClicked
   
     private void btn_finishMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_finishMouseClicked
-        // TODO add your handling code here:
-        selectedAuction.pararAuction();
+        
+        leilaoSelecionado.pararLeilao();
         refreshTable();
         normalMode();
     }//GEN-LAST:event_btn_finishMouseClicked
+
+    private void btn_startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_startActionPerformed
+        Temporizador temp = new Temporizador();
+        
+        temp.timer.scheduleAtFixedRate(temp.task, 100, ABORT);
+        
+        if(temp.estaRodando == false){
+            System.out.println("fechar programa");
+        }
+        
+        leilaoSelecionado.setStatus(2);
+        
+    }//GEN-LAST:event_btn_startActionPerformed
+
+    private void btn_finishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_finishActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_finishActionPerformed
     
     /**
      * @param args the command line arguments

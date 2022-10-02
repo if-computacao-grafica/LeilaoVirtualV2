@@ -5,7 +5,7 @@
  */
 package com.mycompany.leilaoservidorunicast.comunicacaoexterna;
 
-import com.mycompany.leilaoservidormulticast.compartilhado.domain.Auction;
+import com.mycompany.leilaoservidormulticast.compartilhado.domain.Leilao;
 import com.mycompany.leilaoservidormulticast.compartilhado.dtos.StreamDto;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -28,7 +28,7 @@ public class ComunicaMulticast {
     int serverPort;
     ObjectOutputStream output;
     ObjectInputStream input;
-    ArrayList<Auction> auctions = new ArrayList<>();
+    ArrayList<Leilao> leiloes = new ArrayList<>();
 
     public ComunicaMulticast() {
         try {
@@ -46,22 +46,22 @@ public class ComunicaMulticast {
     
     public void enviarListaRequisicoesDoLeilao() { //verificar lógica do nome em razão do código
         try {
-            StreamDto data = new StreamDto(StreamDto.REQUISICAO_AUCTIONS);
+            StreamDto data = new StreamDto(StreamDto.REQUISICAO_LEILOES);
             output.writeObject(data);
         } catch (IOException ex) {
             Logger.getLogger(ComunicaMulticast.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    public ArrayList<Auction> listenListaLeilao() throws IOException, ClassNotFoundException {
+    public ArrayList<Leilao> listenListaLeilao() throws IOException, ClassNotFoundException {
         StreamDto data = (StreamDto) input.readObject();
-        if (data.getTipo() == StreamDto.RESPOSTA_AUCTIONS) {
-            return (ArrayList<Auction>) data.getPayload();
+        if (data.getTipo() == StreamDto.RESPOSTA_LEILOES) {
+            return (ArrayList<Leilao>) data.getPayload();
         }
         return null;
     }
     
-    public ArrayList<Auction> getAuctions() {
-        return auctions;
+    public ArrayList<Leilao> getAuctions() {
+        return leiloes;
     }
 }

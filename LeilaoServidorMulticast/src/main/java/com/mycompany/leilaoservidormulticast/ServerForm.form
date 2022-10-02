@@ -146,6 +146,7 @@
       </AccessibilityProperties>
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btn_finishMouseClicked"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_finishActionPerformed"/>
       </Events>
     </Component>
     <Component class="java.awt.Button" name="btn_create">
@@ -164,6 +165,7 @@
       </Properties>
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btn_startMouseClicked"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_startActionPerformed"/>
       </Events>
     </Component>
     <Component class="java.awt.Button" name="btn_cancel">
