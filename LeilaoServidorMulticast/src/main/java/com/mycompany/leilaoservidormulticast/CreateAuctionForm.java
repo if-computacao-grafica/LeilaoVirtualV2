@@ -62,7 +62,7 @@ public class CreateAuctionForm extends javax.swing.JFrame {
 
         IdText.setText("Endereço");
 
-        btn_back.setText("Back");
+        btn_back.setText("Voltar");
 
         IdText1.setText("Porta");
 

@@ -86,7 +86,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btn_back">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Back"/>
+        <Property name="text" type="java.lang.String" value="Voltar"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txt_name1">

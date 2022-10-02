@@ -49,7 +49,7 @@ public class CriarClienteForm extends javax.swing.JFrame {
 
         jLabel1.setText("Nome");
 
-        btn_back.setText("Back");
+        btn_back.setText("Voltar");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
