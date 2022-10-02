@@ -1,6 +1,7 @@
 package com.mycompany.leilaoservidormulticast;
 
 import com.mycompany.leilaoservidormulticast.compartilhado.domain.Auction;
+import com.mycompany.leilaoservidormulticast.utils.Temporizador;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -89,6 +90,11 @@ public class ServerForm extends javax.swing.JFrame {
         btn_start.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btn_startMouseClicked(evt);
+            }
+        });
+        btn_start.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_startActionPerformed(evt);
             }
         });
 
@@ -209,6 +215,19 @@ public class ServerForm extends javax.swing.JFrame {
         refreshTable();
         normalMode();
     }//GEN-LAST:event_btn_finishMouseClicked
+
+    private void btn_startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_startActionPerformed
+        Temporizador temp = new Temporizador();
+        
+        temp.timer.scheduleAtFixedRate(temp.task, 100, ABORT);
+        
+        if(temp.estaRodando == false){
+            System.out.println("fechar programa");
+        }
+        
+      
+        
+    }//GEN-LAST:event_btn_startActionPerformed
     
     /**
      * @param args the command line arguments
