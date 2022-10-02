@@ -5,7 +5,7 @@
 
 package com.mycompany.leilaoservidormulticast;
 
-import com.mycompany.leilaoservidormulticast.compartilhado.domain.Auction;
+import com.mycompany.leilaoservidormulticast.compartilhado.domain.Leilao;
 import com.mycompany.leilaoservidormulticast.compartilhado.domain.Cliente;
 import com.mycompany.leilaoservidormulticast.compartilhado.dtos.StreamDto;
 import com.mycompany.leilaoservidormulticast.utils.CriptografiaUtils;
@@ -25,7 +25,7 @@ public class LeilaoServidor {
     private ServerSocket server;
     private Socket socket;
     private static final int PORT = 3000;
-    private ArrayList<Auction> auctions = new ArrayList<>();
+    private ArrayList<Leilao> leiloes = new ArrayList<>();
     private ArrayList<Cliente> clientes = new ArrayList<>();
     
     public void iniciarServer(){
@@ -80,7 +80,7 @@ public class LeilaoServidor {
 
     public void enviaActions(ObjectOutputStream output) {
         try {
-            output.writeObject(new StreamDto(StreamDto.RESPOSTA_AUCTIONS, auctions));
+            output.writeObject(new StreamDto(StreamDto.RESPOSTA_AUCTIONS, leiloes));
             output.reset();
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
@@ -96,16 +96,16 @@ public class LeilaoServidor {
         }
     }
 
-    public void addAuction(Auction auction) {
-        auctions.add(auction);
+    public void addAuction(Leilao leilao) {
+        leiloes.add(leilao);
     }
 
     public void deleteAuction(int index) {
-        auctions.remove(index);
+        leiloes.remove(index);
     }
 
-    public ArrayList<Auction> getAuctions() {
-        return auctions;
+    public ArrayList<Leilao> getAuctions() {
+        return leiloes;
     }
     
     public ArrayList<Cliente> getClientes() {

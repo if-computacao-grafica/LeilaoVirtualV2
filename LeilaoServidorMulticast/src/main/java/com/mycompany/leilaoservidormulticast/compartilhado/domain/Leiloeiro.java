@@ -23,9 +23,9 @@ import java.io.Serializable;
 public class Leiloeiro implements Serializable {
 
     private transient MulticastSocket socket;
-    private Auction auction;
+    private Leilao auction;
 
-    public Leiloeiro(Auction auction) {
+    public Leiloeiro(Leilao auction) {
         try {
             this.auction = auction;
             socket = new MulticastSocket(auction.getPorta());
@@ -37,7 +37,7 @@ public class Leiloeiro implements Serializable {
     public void joinAuction() {
         try {
             socket.joinGroup(auction.getEndereco());
-            auction.setStatus(Auction.INICIADO);
+            auction.setStatus(Leilao.INICIADO);
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
@@ -47,7 +47,7 @@ public class Leiloeiro implements Serializable {
         try {
             sendEndAuction();
             socket.leaveGroup(auction.getEndereco());
-            auction.setStatus(Auction.FINALIZADO);
+            auction.setStatus(Leilao.FINALIZADO);
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }

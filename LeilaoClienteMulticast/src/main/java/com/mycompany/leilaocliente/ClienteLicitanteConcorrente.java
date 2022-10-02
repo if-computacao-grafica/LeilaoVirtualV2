@@ -5,7 +5,7 @@
  */
 package com.mycompany.leilaocliente;
 
-import com.mycompany.leilaoservidormulticast.compartilhado.domain.Auction;
+import com.mycompany.leilaoservidormulticast.compartilhado.domain.Leilao;
 import com.mycompany.leilaoservidormulticast.compartilhado.dtos.StreamDto;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -28,7 +28,7 @@ public class ClienteLicitanteConcorrente {
     int serverPort;
     ObjectOutputStream output;
     ObjectInputStream input;
-    ArrayList<Auction> auctions = new ArrayList<>();
+    ArrayList<Leilao> auctions = new ArrayList<>();
 
     public ClienteLicitanteConcorrente() {
         try {
@@ -60,7 +60,7 @@ public class ClienteLicitanteConcorrente {
                     StreamDto data = (StreamDto) input.readObject();
                     
                     if (data.getTipo() == StreamDto.RESPOSTA_AUCTIONS) {
-                        auctions = (ArrayList<Auction>) data.getPayload();
+                        auctions = (ArrayList<Leilao>) data.getPayload();
                         callback.run();
                     }
                 } catch (IOException | ClassNotFoundException ex) {
@@ -70,7 +70,7 @@ public class ClienteLicitanteConcorrente {
         }).start();
     }
 
-    public ArrayList<Auction> getAuctions() {
+    public ArrayList<Leilao> getAuctions() {
         return auctions;
     }
 }

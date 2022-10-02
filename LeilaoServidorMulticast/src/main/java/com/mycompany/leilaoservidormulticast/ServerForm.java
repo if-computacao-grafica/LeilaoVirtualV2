@@ -1,6 +1,6 @@
 package com.mycompany.leilaoservidormulticast;
 
-import com.mycompany.leilaoservidormulticast.compartilhado.domain.Auction;
+import com.mycompany.leilaoservidormulticast.compartilhado.domain.Leilao;
 import com.mycompany.leilaoservidormulticast.utils.Temporizador;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
@@ -14,7 +14,7 @@ import javax.swing.table.DefaultTableModel;
 public class ServerForm extends javax.swing.JFrame {
     
     private LeilaoServidor server = new LeilaoServidor();
-    private Auction selectedAuction;
+    private Leilao leilaoSelecionado;
     
     /**
      * Creates new form Server
@@ -154,12 +154,12 @@ public class ServerForm extends javax.swing.JFrame {
     }
     
     private void editMode() {
-        btn_start.setEnabled(selectedAuction.getStatus() == Auction.NAO_INICIADO);
-        btn_finish.setEnabled(selectedAuction.getStatus() == Auction.INICIADO);
+        btn_start.setEnabled(leilaoSelecionado.getStatus() == Leilao.NAO_INICIADO);
+        btn_finish.setEnabled(leilaoSelecionado.getStatus() == Leilao.INICIADO);
         btn_cancel.setEnabled(true);
     }
     
-    public void addAuction(Auction auction) {
+    public void addAuction(Leilao auction) {
         server.addAuction(auction);
         refreshTable();
     }
@@ -177,7 +177,7 @@ public class ServerForm extends javax.swing.JFrame {
                 auction.getPorta(),
                 auction.getUltimoLance().getPreco(),
                 auction.getUltimoLance().getNomeParticipante(),
-                status == Auction.NAO_INICIADO ? "not started" : status == Auction.INICIADO ? "started" : "finished"
+                status == Leilao.NAO_INICIADO ? "not started" : status == Leilao.INICIADO ? "started" : "finished"
             });
         });
     }
@@ -190,19 +190,19 @@ public class ServerForm extends javax.swing.JFrame {
     private void tbl_auctionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_auctionMouseClicked
         // TODO add your handling code here:
         int index = tbl_auction.getSelectedRow();
-        selectedAuction = server.getAuctions().get(index);
+        leilaoSelecionado = server.getAuctions().get(index);
         editMode();
     }//GEN-LAST:event_tbl_auctionMouseClicked
 
     private void btn_cancelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_cancelMouseClicked
         // TODO add your handling code here:
         normalMode();
-        selectedAuction = null;
+        leilaoSelecionado = null;
     }//GEN-LAST:event_btn_cancelMouseClicked
 
     private void btn_startMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_startMouseClicked
         // TODO add your handling code here:
-        selectedAuction.iniciarAuction(() -> {
+        leilaoSelecionado.iniciarAuction(() -> {
             refreshTable();
         });
         refreshTable();
@@ -211,7 +211,7 @@ public class ServerForm extends javax.swing.JFrame {
   
     private void btn_finishMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_finishMouseClicked
         // TODO add your handling code here:
-        selectedAuction.pararAuction();
+        leilaoSelecionado.pararAuction();
         refreshTable();
         normalMode();
     }//GEN-LAST:event_btn_finishMouseClicked

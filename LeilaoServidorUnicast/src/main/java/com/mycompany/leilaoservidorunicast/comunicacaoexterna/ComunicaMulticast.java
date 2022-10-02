@@ -5,7 +5,7 @@
  */
 package com.mycompany.leilaoservidorunicast.comunicacaoexterna;
 
-import com.mycompany.leilaoservidormulticast.compartilhado.domain.Auction;
+import com.mycompany.leilaoservidormulticast.compartilhado.domain.Leilao;
 import com.mycompany.leilaoservidormulticast.compartilhado.dtos.StreamDto;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -28,7 +28,7 @@ public class ComunicaMulticast {
     int serverPort;
     ObjectOutputStream output;
     ObjectInputStream input;
-    ArrayList<Auction> auctions = new ArrayList<>();
+    ArrayList<Leilao> auctions = new ArrayList<>();
 
     public ComunicaMulticast() {
         try {
@@ -53,15 +53,15 @@ public class ComunicaMulticast {
         }
     }
     
-    public ArrayList<Auction> listenListaLeilao() throws IOException, ClassNotFoundException {
+    public ArrayList<Leilao> listenListaLeilao() throws IOException, ClassNotFoundException {
         StreamDto data = (StreamDto) input.readObject();
         if (data.getTipo() == StreamDto.RESPOSTA_AUCTIONS) {
-            return (ArrayList<Auction>) data.getPayload();
+            return (ArrayList<Leilao>) data.getPayload();
         }
         return null;
     }
     
-    public ArrayList<Auction> getAuctions() {
+    public ArrayList<Leilao> getAuctions() {
         return auctions;
     }
 }

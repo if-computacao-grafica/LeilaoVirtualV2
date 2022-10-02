@@ -1,6 +1,6 @@
 package com.mycompany.leilaoservidorunicast.rmi;
 
-import com.mycompany.leilaoservidormulticast.compartilhado.domain.Auction;
+import com.mycompany.leilaoservidormulticast.compartilhado.domain.Leilao;
 import com.mycompany.leilaoservidorunicast.comunicacaoexterna.ComunicaMulticast;
 import com.mycompany.leilaoservidorunicast.domain.Cliente;
 import com.mycompany.leilaoservidorunicast.util.CriptografiaUtils;
@@ -17,7 +17,7 @@ public class ProtocoloRMI implements IProtocoloRMI {
     private ArrayList<Cliente> clientes = new ArrayList<Cliente>(); 
     
     private ComunicaMulticast comunicacoExterna = new ComunicaMulticast();
-    private ArrayList<Auction> dadosLeiloes = new ArrayList<Auction>();
+    private ArrayList<Leilao> dadosLeiloes = new ArrayList<Leilao>();
     private PublicKey chavePublica;
 
     
@@ -50,7 +50,7 @@ public class ProtocoloRMI implements IProtocoloRMI {
 
     public byte[] getChaveSimetrica() throws RemoteException {
         String chaveSimetrica = null;
-        for (Auction auction : dadosLeiloes) {
+        for (Leilao auction : dadosLeiloes) {
             if(auction.getStatus() == 2){
                 chaveSimetrica = Base64.getEncoder().encodeToString(
                     auction.getChaveSimetrica().getEncoded());
@@ -65,7 +65,7 @@ public class ProtocoloRMI implements IProtocoloRMI {
     
     public byte[] getEnderecoMulticast() throws RemoteException{
         String endereco = null;
-        for (Auction auction : dadosLeiloes) {
+        for (Leilao auction : dadosLeiloes) {
             if(auction.getStatus() == 2){
                 endereco = Base64.getEncoder().encodeToString(auction.getEndereco().getHostAddress().getBytes());
                 System.out.println("conferencia no get: " + endereco);

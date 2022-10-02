@@ -112,8 +112,8 @@ public class Cliente {
          return cliente.autorizado;
     }
 
-    public byte[] obterMensagemCifrada(byte[] message) {
-        return CriptografiaUtils.cifrarTexto(chavePublica, message);
+    public byte[] obterMensagemCifrada(byte[] mensagem) {
+        return CriptografiaUtils.cifrarTexto(chavePublica, mensagem);
     }
 
     public boolean getAutorizado() {
