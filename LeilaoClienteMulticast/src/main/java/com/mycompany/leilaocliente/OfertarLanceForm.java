@@ -5,26 +5,27 @@
  */
 package com.mycompany.leilaocliente;
 
-import com.mycompany.leilaoservidormulticast.compartilhado.domain.Auction;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JOptionPane;
 
+import com.mycompany.leilaoservidormulticast.compartilhado.domain.Leilao;
+
 /**
  *
  * @author skmat
  */
-public class BidderForm extends javax.swing.JFrame {
+public class OfertarLanceForm extends javax.swing.JFrame {
 
     private ClienteLicitante bidder;
     private ClienteLicitanteConcorrente bidderCandidate = new ClienteLicitanteConcorrente();
-    private ArrayList<Auction> leiloes = new ArrayList<Auction>();
+    private ArrayList<Leilao> leiloes = new ArrayList<Leilao>();
     /**
      * Creates new form BidderForm
      */
-    public BidderForm() {
+    public OfertarLanceForm() {
         initComponents();
         bidderCandidate.enviarListaRequisicoesDoLeilao();
         bidderCandidate.listenListaLeilao(() -> {
@@ -204,7 +205,7 @@ public class BidderForm extends javax.swing.JFrame {
     
     private void btn_joinMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_joinMouseClicked
         // TODO add your handling code here:
-        for (Auction leilao : leiloes) {
+        for (Leilao leilao : leiloes) {
             if(leilao.getStatus() == 2) {
                 if(leilao.getEnderecoString().equals(txt_endereco.getText())) {
                     if(leilao.getChaveSimetricaString().equals(txt_chave.getText())){
@@ -230,7 +231,7 @@ public class BidderForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btn_joinMouseClicked
 
-    private ClienteLicitante createBidder(Auction leilao) {
+    private ClienteLicitante createBidder(Leilao leilao) {
 
         return new ClienteLicitante(txt_apelido.getText(), leilao);
     }
@@ -285,8 +286,11 @@ public class BidderForm extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(BidderForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(OfertarLanceForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         //</editor-fold>
@@ -294,7 +298,7 @@ public class BidderForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new BidderForm().setVisible(true);
+                new OfertarLanceForm().setVisible(true);
             }
         });
     }

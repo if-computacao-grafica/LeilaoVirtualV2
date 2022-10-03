@@ -62,27 +62,33 @@ public class LeilaoClienteUnicast {
                         switch(entrada[1].toLowerCase()) {
                             case "entrar":
                                 if (entrada.length < 4) {
-                                    System.out.println("Para entrar no servidor utilize: `conta/entrar/{endereco}/{nome}`.");
+                                    System.out.println("Para entrar no servidor utilize: `conta/entrar/{nome}/{chavePublica}`.");
                                     break;
                                 } else {
-                                    _rmi.informarChavePublica(entrada[2]);
-                                    PrivateKey chavePrivada = CriptografiaUtils.lerChavePrivada("C:\\chaves\\chavesPrivadas\\"+entrada[3]);
+                                    _rmi.informarChavePublica(entrada[3]);
+                                    PrivateKey chavePrivada = CriptografiaUtils.lerChavePrivada("C:\\chaves\\chavesPrivadas\\"+entrada[2]);
 
                                     byte[] enderecoCifrado = _rmi.getEnderecoMulticast();
                                     byte[] chaveCifrada = _rmi.getChaveSimetrica();
-                                    byte[] enderecoDecifrado = CriptografiaUtils.decifrarTexto(chavePrivada, enderecoCifrado);
-                                    byte[] chaveDecifrada = CriptografiaUtils.decifrarTexto(chavePrivada, chaveCifrada);
-                                    
-                                    // Reconstrução da chaveDecifrada em texto
-                                    byte[] decodedKey = Base64.getDecoder().decode(chaveDecifrada);
-                                    SecretKey chaveAES = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
-                                    
-                                    // Representação da chave simetrica em texto
-                                    System.out.print("Chave Multicast: ");
-                                    System.out.println(Base64.getEncoder().encodeToString(chaveAES.getEncoded()));
-                                    
-                                    System.out.print("Endereco Multicast: ");
-                                    System.out.println(new String(Base64.getDecoder().decode(enderecoDecifrado)));
+                                    if (enderecoCifrado != null && chaveCifrada != null) {
+                                        byte[] enderecoDecifrado = CriptografiaUtils.decifrarTexto(chavePrivada, enderecoCifrado);
+                                        byte[] chaveDecifrada = CriptografiaUtils.decifrarTexto(chavePrivada, chaveCifrada);
+
+                                        // Reconstrução da chaveDecifrada em texto
+                                        byte[] decodedKey = Base64.getDecoder().decode(chaveDecifrada);
+                                        SecretKey chaveAES = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
+
+                                        // Representação da chave simetrica em texto
+                                        System.out.print("Chave Multicast: ");
+                                        System.out.println(Base64.getEncoder().encodeToString(chaveAES.getEncoded()));
+
+                                        System.out.print("Endereco Multicast: ");
+                                        System.out.println(new String(Base64.getDecoder().decode(enderecoDecifrado)));
+                                    }
+                                    else {
+                                        System.out.println("Nenhum leilão iniciado");
+                                        break;
+                                    }
                                 }
                             break;
                             case "criar":

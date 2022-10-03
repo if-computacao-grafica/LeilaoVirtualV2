@@ -33,12 +33,10 @@
                               <Component id="btn_create" min="-2" pref="101" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="btn_start" min="-2" pref="101" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btn_finish" min="-2" pref="101" max="-2" attributes="0"/>
                           </Group>
                           <Component id="btn_cancel" alignment="0" min="-2" pref="101" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="294" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="405" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -50,7 +48,6 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="btn_finish" min="-2" pref="33" max="-2" attributes="0"/>
                   <Component id="btn_create" min="-2" pref="33" max="-2" attributes="0"/>
                   <Component id="btn_start" min="-2" pref="33" max="-2" attributes="0"/>
               </Group>
@@ -75,13 +72,13 @@
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="7" rowCount="4">
-                <Column editable="false" title="Product Name" type="java.lang.Object"/>
-                <Column editable="false" title="Price" type="java.lang.Object"/>
-                <Column editable="false" title="Address" type="java.lang.Object"/>
-                <Column editable="false" title="Port" type="java.lang.Object"/>
-                <Column editable="false" title="Last Bid" type="java.lang.Object"/>
-                <Column editable="false" title="Last Bidder" type="java.lang.Object"/>
-                <Column editable="false" title="Status" type="java.lang.Object"/>
+                <Column editable="false" title="Produto" type="java.lang.Object"/>
+                <Column editable="false" title="Pre&#xe7;o" type="java.lang.Object"/>
+                <Column editable="false" title="Endere&#xe7;o" type="java.lang.Object"/>
+                <Column editable="false" title="Porta" type="java.lang.Object"/>
+                <Column editable="false" title="&#xda;ltima Oferta" type="java.lang.Object"/>
+                <Column editable="false" title="Ofertador" type="java.lang.Object"/>
+                <Column editable="false" title="Estado" type="java.lang.Object"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -136,23 +133,10 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="java.awt.Button" name="btn_finish">
-      <Properties>
-        <Property name="actionCommand" type="java.lang.String" value="buttonCreate"/>
-        <Property name="label" type="java.lang.String" value="Finalizar"/>
-      </Properties>
-      <AccessibilityProperties>
-        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="buttonCreate"/>
-      </AccessibilityProperties>
-      <Events>
-        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btn_finishMouseClicked"/>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_finishActionPerformed"/>
-      </Events>
-    </Component>
     <Component class="java.awt.Button" name="btn_create">
       <Properties>
         <Property name="actionCommand" type="java.lang.String" value="buttonCreate"/>
-        <Property name="label" type="java.lang.String" value="Criar A&#xe7;&#xe3;o"/>
+        <Property name="label" type="java.lang.String" value="Criar Leil&#xe3;o"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_createActionPerformed"/>

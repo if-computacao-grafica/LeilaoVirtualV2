@@ -8,43 +8,17 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.mycompany.leilaoservidormulticast.compartilhado.domain.Leilao;
+
 /**
  *
  * @author lucas
  */
 public class Temporizador {
     
-    /*
-    
-    public int segundos = 10;
-    int delay = 5000;   // delay de 5 seg.
-    int interval = 1000;  // intervalo de 1 seg.
-    Timer timer = new Timer();
-
-        timer.schedule(new TimerTask() {
-            
-            public void run() {
-                   
-            }
-            
-          
-            System.out.println(segundos + " Segundos");   
-            
-            
-        }, delay);
-    
-    */
-    
-    
-    
     public Timer timer = new Timer();
     
-    public int segundos = 25; 
-    
-    public int delay = 5000; 
-    
-    public boolean estaRodando = true;
-    
+    public int segundos = 240;
     public TimerTask task = new TimerTask() {
         
         @Override
@@ -52,15 +26,12 @@ public class Temporizador {
               
             if(segundos > 0){
                 segundos--;
-                System.out.println(segundos + " Segundos"); 
+                System.out.println(segundos + " segundos restantes"); 
             }   
             
            if(segundos == 0){
-               estaRodando = false;
-               task.cancel();
-               System.out.println("task encerrada");
-               
-           }
+                task.cancel();          
+            }
             
         }
     };

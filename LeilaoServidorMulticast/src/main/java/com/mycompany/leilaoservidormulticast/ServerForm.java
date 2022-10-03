@@ -3,6 +3,9 @@ package com.mycompany.leilaoservidormulticast;
 import com.mycompany.leilaoservidormulticast.compartilhado.domain.Leilao;
 import com.mycompany.leilaoservidormulticast.utils.Temporizador;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
@@ -15,6 +18,9 @@ public class ServerForm extends javax.swing.JFrame {
     
     private LeilaoServidor server = new LeilaoServidor();
     private Leilao leilaoSelecionado;
+    private Leilao leilaoAtivo;
+    private ArrayList<Leilao> leiloes;
+    private boolean algumLeilaoIniciado;
     
     /**
      * Creates new form Server
@@ -36,7 +42,6 @@ public class ServerForm extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tbl_auction = new javax.swing.JTable();
-        btn_finish = new java.awt.Button();
         btn_create = new java.awt.Button();
         btn_start = new java.awt.Button();
         btn_cancel = new java.awt.Button();
@@ -51,7 +56,7 @@ public class ServerForm extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Product Name", "Price", "Address", "Port", "Last Bid", "Last Bidder", "Status"
+                "Produto", "Preço", "Endereço", "Porta", "Última Oferta", "Ofertador", "Estado"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -69,21 +74,8 @@ public class ServerForm extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tbl_auction);
 
-        btn_finish.setActionCommand("buttonCreate");
-        btn_finish.setLabel("Finalizar");
-        btn_finish.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btn_finishMouseClicked(evt);
-            }
-        });
-        btn_finish.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_finishActionPerformed(evt);
-            }
-        });
-
         btn_create.setActionCommand("buttonCreate");
-        btn_create.setLabel("Criar Ação");
+        btn_create.setLabel("Criar Leilão");
         btn_create.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_createActionPerformed(evt);
@@ -124,11 +116,9 @@ public class ServerForm extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btn_create, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btn_start, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(btn_start, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(btn_cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 294, Short.MAX_VALUE)))
+                        .addGap(0, 405, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -136,7 +126,6 @@ public class ServerForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(46, 46, 46)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_create, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_start, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(28, 28, 28)
@@ -146,21 +135,24 @@ public class ServerForm extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        btn_finish.getAccessibleContext().setAccessibleName("buttonCreate");
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
     private void normalMode() {
         tbl_auction.clearSelection();
         btn_start.setEnabled(false);
-        btn_finish.setEnabled(false);
         btn_cancel.setEnabled(false);
     }
     
     private void editMode() {
-        btn_start.setEnabled(leilaoSelecionado.getStatus() == Leilao.NAO_INICIADO);
-        btn_finish.setEnabled(leilaoSelecionado.getStatus() == Leilao.INICIADO);
+        leiloes = server.getLeiloes();
+        algumLeilaoIniciado = false;
+        for (Leilao leilao : leiloes) {
+            if(leilao.getStatus() == 2){
+                algumLeilaoIniciado = true;
+            }
+        }
+        btn_start.setEnabled(leilaoSelecionado.getStatus() == Leilao.NAO_INICIADO && !algumLeilaoIniciado);
         btn_cancel.setEnabled(true);
     }
     
@@ -193,7 +185,6 @@ public class ServerForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_createActionPerformed
 
     private void tbl_auctionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_auctionMouseClicked
-       
         int index = tbl_auction.getSelectedRow();
         leilaoSelecionado = server.getLeiloes().get(index);
         editMode();
@@ -214,29 +205,25 @@ public class ServerForm extends javax.swing.JFrame {
         normalMode();
     }//GEN-LAST:event_btn_startMouseClicked
   
-    private void btn_finishMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_finishMouseClicked
-        
-        leilaoSelecionado.pararLeilao();
-        refreshTable();
-        normalMode();
-    }//GEN-LAST:event_btn_finishMouseClicked
-
     private void btn_startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_startActionPerformed
+        
+        int delay = 240000;
+        Timer timer = new Timer();
         Temporizador temp = new Temporizador();
-        
-        temp.timer.scheduleAtFixedRate(temp.task, 100, ABORT);
-        
-        if(temp.estaRodando == false){
-            System.out.println("fechar programa");
-        }
-        
-        leilaoSelecionado.setStatus(2);
-        
-    }//GEN-LAST:event_btn_startActionPerformed
+        temp.timer.scheduleAtFixedRate(temp.task, 0, 1000);
+        timer.schedule(new TimerTask() {
+                public void run() {
+                    server.getLeiloes().forEach((leilao) -> {
+                        if(leilao.getStatus() == 2){
+                            leilao.pararLeilao();
+                            refreshTable();
+                            normalMode();
+                        }
+                    });
+                }
+            }, delay);
 
-    private void btn_finishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_finishActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btn_finishActionPerformed
+    }//GEN-LAST:event_btn_startActionPerformed
     
     /**
      * @param args the command line arguments
@@ -283,7 +270,6 @@ public class ServerForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.Button btn_cancel;
     private java.awt.Button btn_create;
-    private java.awt.Button btn_finish;
     private java.awt.Button btn_start;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tbl_auction;

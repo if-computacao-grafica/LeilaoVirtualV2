@@ -9,6 +9,8 @@ import com.mycompany.leilaoservidormulticast.compartilhado.dtos.LanceDto;
 import com.mycompany.leilaoservidormulticast.utils.CriptografiaUtils;
 import java.io.Serializable;
 import java.net.InetAddress;
+import java.util.Base64;
+
 import javax.crypto.SecretKey;
 
 /**
@@ -85,6 +87,13 @@ public class Leilao implements Serializable {
 
     public SecretKey getChaveSimetrica() {
         return chaveSimetrica;
+    }
+    public String getEnderecoString() {
+        return endereco.getHostAddress();
+    }
+        
+    public String getChaveSimetricaString() {
+        return Base64.getEncoder().encodeToString(chaveSimetrica.getEncoded());
     }
 
 }
